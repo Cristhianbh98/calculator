@@ -1,9 +1,10 @@
 .calculator {
-  width: 300px;
+  width: 30rem;
   padding: 1rem;
   border-radius: .5rem;
   background-color: var(--color-gray-light-2);
   box-shadow: 0 0rem 3rem .5rem rgba($color: #d6d6d6, $alpha: .5);
+  position: relative;
 
   &__options {
     text-align: right;
@@ -34,7 +35,13 @@
 
     display: grid;
     grid-gap: .5rem;
+    grid-template-rows:repeat(5, 1fr) ;
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  &__equal {
+    grid-column: -2 / -1;
+    grid-row: -3 / -1;
   }
 }
 
@@ -47,6 +54,7 @@
   color: var(--color-gray-dark-1);
   font-size: inherit;
   line-height: 1;
+  transition: filter .2s;
 
   &:hover,
   &:focus {

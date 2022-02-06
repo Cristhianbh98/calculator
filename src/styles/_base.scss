@@ -22,3 +22,11 @@ html {
 
   background: linear-gradient(to right bottom,#4dabf7,#69db7c);
 }
+
+.text-color-blue {
+  color: var(--color-blue) !important;
+}
+
+.fill-blue {
+  fill: var(--color-blue) !important;
+}
