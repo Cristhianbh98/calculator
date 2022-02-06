@@ -2,9 +2,9 @@ import './main.scss'
 
 // Global var
 const html = document.querySelector('html')
+const historyContainer = document.getElementById('history-container')
 
 // Change the theme
-
 const toggleThemeButton = document.getElementById('toggle-theme')
 
 toggleThemeButton?.addEventListener('click', () => {
@@ -22,3 +22,10 @@ function toggleTheme(currentTheme: string) {
     toggleThemeButton?.setAttribute('data-theme', 'light')
   }
 }
+
+// toggle history
+const toggleHistoryButton = document.getElementById('toogle-history')
+
+toggleHistoryButton?.addEventListener('click', () => {
+  historyContainer?.classList.toggle('active')
+})
