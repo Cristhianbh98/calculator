@@ -1,15 +1,15 @@
 .calculator {
   width: 300px;
-  padding: .5rem;
+  padding: 1rem;
   border-radius: .5rem;
   background-color: var(--color-gray-light-2);
-  box-shadow: 0 1.5rem 3rem rgba($color: #d6d6d6, $alpha: .5);
+  box-shadow: 0 0rem 3rem .5rem rgba($color: #d6d6d6, $alpha: .5);
 
   &__options {
     text-align: right;
     margin-bottom: 1rem;
 
-    .btn {
+    .option {
       padding: 1rem;
 
       &:not(:last-child) {
@@ -18,7 +18,7 @@
     }
   }
 
-  &__visor {
+  &__display {
     padding: 1.5rem 1rem;
     margin-bottom: 1rem;
     border-radius: .5rem;
@@ -29,7 +29,7 @@
     font-size: 4rem;
   }
 
-  &__actions {
+  &__keypad {
     width: 100%;
 
     display: grid;
@@ -46,6 +46,7 @@
   background-color: var(--color-gray-light-1);
   color: var(--color-gray-dark-1);
   font-size: inherit;
+  line-height: 1;
 
   &:hover,
   &:focus {
