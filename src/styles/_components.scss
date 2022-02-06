@@ -7,11 +7,16 @@
   position: relative;
 
   &__options {
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+
     margin-bottom: 1rem;
 
     .option {
       padding: 1rem;
+      width: 4rem;
+      height: 4rem;
 
       &:not(:last-child) {
         margin-right: .5rem;
@@ -28,6 +33,7 @@
     
     font-family: 'digital';
     font-size: 4rem;
+    color: var(--color-text-2);
   }
 
   &__keypad {
@@ -39,9 +45,68 @@
     grid-template-columns: repeat(4, 1fr);
   }
 
+  &__history {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0%;
+    visibility: hidden;
+
+    background: rgba($color: #efefef, $alpha: 0.8);
+    backdrop-filter: blur(2px);
+
+    overflow: hidden;
+    
+    &.active {
+      height: 55%;
+      visibility: visible;
+    }
+
+    &__content {
+      height: 100%;
+      overflow: auto;
+
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+
+    &__item {
+      margin-left: auto;
+      padding: 1rem;
+      border-radius: .5rem;
+      text-align: right;
+      color: var(--color-text-2);
+      background-color: var(--color-white);
+
+      &:not(:last-child) {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    &__delete.btn {
+      position: fixed;
+      left: 1.5rem;
+      bottom: 1.5rem;
+
+      background-color: var(--color-white);
+    }
+  }
+
   &__equal {
     grid-column: -2 / -1;
     grid-row: -3 / -1;
+  }
+}
+
+html.dark-mode {
+  .calculator {
+    box-shadow: 0 0rem 3rem .5rem rgba($color: #3d3d3d, $alpha: .5);
+
+    &__history {
+      background: rgba($color: #575757, $alpha: 0.8);
+    }
   }
 }
 
@@ -51,7 +116,8 @@
   padding: 1.5rem 1rem;
   cursor: pointer;
   background-color: var(--color-gray-light-1);
-  color: var(--color-gray-dark-1);
+  color: var(--color-text-2);
+  fill: var(--color-text-2);
   font-size: inherit;
   line-height: 1;
   transition: filter .2s;
@@ -67,12 +133,55 @@
   }
 
   &-blue {
-    background-color: var(--color-blue);
+    background-color: var(--color-blue-1);
     color: var(--color-text-1);
+    fill: var(--color-text-1);
   }
 
   &__icon {
     width: 1em;
     height: auto;
+  }
+}
+
+html.dark-mode {
+  .btn {
+    &:hover,
+    &:focus {
+      filter: brightness(1.2);
+      outline: none;
+    }
+
+    &:active {
+      filter: brightness(1.4);
+    }
+  }
+}
+
+.option {
+  &--theme {
+    position: relative;
+
+    .theme-light,
+    .theme-dark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+
+      transition: transform 0.2s;
+    }
+
+    &[data-theme='light'] {
+      .theme-light {
+        transform: translate(-50%, -50%) scale(0);
+      }
+    }
+
+    &[data-theme='dark'] {
+      .theme-dark {
+        transform: translate(-50%, -50%) scale(0);
+      }
+    }
   }
 }

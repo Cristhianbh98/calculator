@@ -17,16 +17,20 @@ html {
   display: grid;
   align-content: center;
   justify-content: center;
-
   min-height: 100vh;
-
   background: linear-gradient(to right bottom,#4dabf7,#69db7c);
 }
 
+html.dark-mode {
+  .container {
+    background: linear-gradient(to right bottom,#1864ab,#087f5b);
+  }
+}
+
 .text-color-blue {
-  color: var(--color-blue) !important;
+  color: var(--color-blue-2) !important;
 }
 
 .fill-blue {
-  fill: var(--color-blue) !important;
+  fill: var(--color-blue-2) !important;
 }
