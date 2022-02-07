@@ -5,7 +5,7 @@
   background-color: var(--color-gray-light-2);
   box-shadow: 0 0rem 3rem .5rem rgba($color: #d6d6d6, $alpha: .5);
   position: relative;
-  // overflow: hidden;
+  overflow: hidden;
 
   &__options {
     display: flex;
@@ -52,20 +52,20 @@
     right: 0;
     bottom: 0;
 
-    opacity: 0;
-    transform: translateY(50%) scale(.8);
     visibility: hidden;
+    height: 70%;
+    transform: translateY(50%) scale(.9);
+    opacity: .5;
     
     background: rgba($color: #efefef, $alpha: 0.8);
     backdrop-filter: blur(2px);
     
     overflow: hidden;
-    transition: transform .2s, opacity .4s cubic-bezier(1,0,1,.98);
+    transition: all .2s cubic-bezier(1,0,1,.98), background-color 0s;
     
     &.active {
       transform: translateY(0%) scale(1);
       opacity: 1;
-      height: 70%;
       visibility: visible;
     }
 
