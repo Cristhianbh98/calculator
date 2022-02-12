@@ -19,6 +19,10 @@
       width: 4rem;
       height: 4rem;
 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       &:not(:last-child) {
         margin-right: .5rem;
       }
@@ -61,7 +65,7 @@
     backdrop-filter: blur(2px);
     
     overflow: hidden;
-    transition: all .2s cubic-bezier(1,0,1,.98), background-color 0s;
+    transition: all .2s ease-in, background-color 0s;
     
     &.active {
       transform: translateY(0%) scale(1);
@@ -97,6 +101,12 @@
       bottom: 1.5rem;
 
       background-color: var(--color-white);
+
+      width: 4rem;
+      height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
