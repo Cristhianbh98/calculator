@@ -5,7 +5,6 @@
   background-color: var(--color-gray-light-2);
   box-shadow: 0 0rem 3rem .5rem rgba($color: #d6d6d6, $alpha: .5);
   position: relative;
-  overflow: hidden;
 
   &__options {
     display: flex;
@@ -58,8 +57,8 @@
 
     visibility: hidden;
     height: 70%;
-    transform: translateY(50%) scale(.9);
-    opacity: .5;
+    transform: translateY(20%) scale(.5);
+    opacity: 0.5;
     
     background: rgba($color: #efefef, $alpha: 0.8);
     backdrop-filter: blur(2px);
@@ -200,4 +199,57 @@ html.dark-mode {
       }
     }
   }
+}
+
+.tooltip {
+  background-color: var(--color-gray-light-1);
+  color: var(--color-text-2);
+  padding: .8rem 1.6rem;
+  border-radius: 5px;
+  visibility: none;
+  opacity: 0;
+  transition: opacity .2s ease-out;
+
+  &.bg-secondary {
+    background-color: var(--color-white);
+  }
+
+  .arrow,
+  .arrow::before {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: inherit;
+  }
+
+  .arrow {
+    visibility: hidden;
+  }
+
+  .arrow::before {
+    visibility: visible;
+    content: '';
+    transform: rotate(45deg);
+  }
+}
+
+.tooltip[data-show] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip[data-popper-placement^='top'] > .arrow {
+  bottom: -4px;
+}
+
+.tooltip[data-popper-placement^='bottom'] > .arrow {
+  top: -4px;
+}
+
+.tooltip[data-popper-placement^='left'] > .arrow {
+  right: -4px;
+}
+
+.tooltip[data-popper-placement^='right'] > .arrow {
+  left: -4px;
 }
