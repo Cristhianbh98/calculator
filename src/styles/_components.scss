@@ -33,6 +33,7 @@
     margin-bottom: 1rem;
     border-radius: .5rem;
     text-align: right;
+    letter-spacing: .3rem;
     background-color: var(--color-gray-light-1);
     
     font-family: 'digital';
@@ -48,13 +49,16 @@
       font-family: inherit;
       font-size: 1.6rem;
       text-align: right;
-      letter-spacing: .3rem;
+      letter-spacing: inherit;
 
       outline: none;
     }
 
     &__resume {
+      display: block;
+
       font-size: 4rem;
+      overflow-x: auto;
     }
   }
 
