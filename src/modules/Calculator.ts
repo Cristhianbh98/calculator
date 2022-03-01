@@ -233,8 +233,8 @@ class Calculator {
     this.resetState()
     this.clearInput()
 
-    this.calculatorResume.textContent = result.toString()
-    this.addInput(result.toString())
+    this.calculatorResume.textContent = result
+    this.addInput(result)
   }
 }
 
