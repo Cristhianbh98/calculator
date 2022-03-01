@@ -29,15 +29,33 @@
   }
 
   &__display {
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem 1.5rem 1rem;
     margin-bottom: 1rem;
     border-radius: .5rem;
     text-align: right;
     background-color: var(--color-gray-light-1);
     
     font-family: 'digital';
-    font-size: 4rem;
     color: var(--color-text-2);
+
+    &__input-history {
+      background-color: inherit;
+      border: none;
+      width: 100%;
+      margin-bottom: 1rem;
+
+      color: inherit;
+      font-family: inherit;
+      font-size: 1.6rem;
+      text-align: right;
+      letter-spacing: .3rem;
+
+      outline: none;
+    }
+
+    &__resume {
+      font-size: 4rem;
+    }
   }
 
   &__keypad {
@@ -217,8 +235,8 @@ html.dark-mode {
   .arrow,
   .arrow::before {
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: .8rem;
+    height: .8rem;
     background: inherit;
   }
 
@@ -239,17 +257,17 @@ html.dark-mode {
 }
 
 .tooltip[data-popper-placement^='top'] > .arrow {
-  bottom: -4px;
+  bottom: -.4rem;
 }
 
 .tooltip[data-popper-placement^='bottom'] > .arrow {
-  top: -4px;
+  top: -.4rem;
 }
 
 .tooltip[data-popper-placement^='left'] > .arrow {
-  right: -4px;
+  right: -.4rem;
 }
 
 .tooltip[data-popper-placement^='right'] > .arrow {
-  left: -4px;
+  left: -.4rem;
 }

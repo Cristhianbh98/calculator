@@ -25,29 +25,32 @@
           <div class="arrow" data-popper-arrow></div>
         </div>
       </div>
-      <div class="calculator__display">0-5</div>
-      <div class="calculator__keypad">
-        <button class="btn text-color-blue">C</button>
-        <button class="btn text-color-blue">&divide;</button>
-        <button class="btn text-color-blue">&times;</button>
-        <button class="btn fill-blue">
+      <div class="calculator__display">
+        <input class="calculator__display__input-history" id="input-history" type="text" disabled/>
+        <span class="calculator__display__resume" id="calculator__resume">0</span>
+      </div>
+      <div id="calculator-keypad" class="calculator__keypad">
+        <button data-key="clear" class="btn text-color-blue">C</button>
+        <button data-key="divide" class="btn text-color-blue">&divide;</button>
+        <button data-key="times" class="btn text-color-blue">&times;</button>
+        <button data-key="erase" class="btn fill-blue">
           <svg class="btn__icon" id="Layer_1" height="512" viewBox="0 0 24 24" width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="m19 2h-9.044a4.966 4.966 0 0 0 -3.946 1.931l-5.8 7.455a1 1 0 0 0 0 1.228l5.8 7.455a4.966 4.966 0 0 0 3.946 1.931h9.044a5.006 5.006 0 0 0 5-5v-10a5.006 5.006 0 0 0 -5-5zm3 15a3 3 0 0 1 -3 3h-9.044a2.979 2.979 0 0 1 -2.368-1.158l-5.321-6.842 5.321-6.842a2.979 2.979 0 0 1 2.368-1.158h9.044a3 3 0 0 1 3 3zm-4.793-6.793-1.793 1.793 1.793 1.793a1 1 0 1 1 -1.414 1.414l-1.793-1.793-1.793 1.793a1 1 0 0 1 -1.414-1.414l1.793-1.793-1.793-1.793a1 1 0 0 1 1.414-1.414l1.793 1.793 1.793-1.793a1 1 0 0 1 1.414 1.414z"/></svg>
         </button>
-        <button class="btn">7</button>
-        <button class="btn">8</button>
-        <button class="btn">9</button>
-        <button class="btn text-color-blue">&minus;</button>
-        <button class="btn">4</button>
-        <button class="btn">5</button>
-        <button class="btn">6</button>
-        <button class="btn text-color-blue">+</button>
-        <button class="btn">1</button>
-        <button class="btn">2</button>
-        <button class="btn">3</button>
-        <button class="btn">%</button>
-        <button class="btn">0</button>
-        <button class="btn">&bull;</button>
-        <button class="btn btn-blue calculator__equal">&#61;</button>
+        <button data-key="7" class="btn">7</button>
+        <button data-key="8" class="btn">8</button>
+        <button data-key="9" class="btn">9</button>
+        <button data-key="minus" class="btn text-color-blue">&minus;</button>
+        <button data-key="4" class="btn">4</button>
+        <button data-key="5" class="btn">5</button>
+        <button data-key="6" class="btn">6</button>
+        <button data-key="plus" class="btn text-color-blue">+</button>
+        <button data-key="1" class="btn">1</button>
+        <button data-key="2" class="btn">2</button>
+        <button data-key="3" class="btn">3</button>
+        <button data-key="percent" class="btn">%</button>
+        <button data-key="0" class="btn">0</button>
+        <button data-key="point" class="btn">&bull;</button>
+        <button data-key="equal" class="btn btn-blue calculator__equal">&#61;</button>
       </div>
 
       <div id="history-container" class="calculator__history">
@@ -61,7 +64,7 @@
           <svg class="btn__icon" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z"/><path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z"/><path d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"/></svg>
         </button>
         <div id="delete-history-btn-tooltip" class="tooltip bg-secondary" role="tooltip">
-          Toggle History
+          Delete History
           <div class="arrow" data-popper-arrow></div>
         </div>
       </div>
