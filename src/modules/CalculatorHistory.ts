@@ -1,4 +1,4 @@
-import { getState } from './store'
+import { getState } from './settingState'
 const {isHistoryActive, updateSetting} = getState()
 
 class CalculatorHistory {
