@@ -23,6 +23,7 @@ class Popper {
     this.events()
   }
 
+  // events
   events() {
     const showEvents = ['mouseenter', 'focus']
     const hideEvents = ['mouseleave', 'blur']
@@ -36,6 +37,7 @@ class Popper {
     })
   }
 
+  // methods
   show() {
     this.tooltip.setAttribute('data-show', '')
     this.popperInstance.update()

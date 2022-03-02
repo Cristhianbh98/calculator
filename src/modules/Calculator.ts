@@ -1,3 +1,6 @@
+import CalculatorTheme from './CalculatorTheme'
+import CalculatorHistory from './CalculatorHistory'
+
 type tkeyOptions = {
   [key: string]: () => void
 }
@@ -10,8 +13,6 @@ type tCalculatorState = {
 class Calculator {
   calculatorEL: HTMLElement
   calculatorResume: HTMLElement
-  historyContainer: HTMLElement
-  toggleHistoryButton: HTMLElement
   keypad: HTMLElement
 
   inputHistory: string
@@ -23,8 +24,6 @@ class Calculator {
 
   constructor() {
     this.calculatorEL = <HTMLElement> document.querySelector('#calculator')
-    this.historyContainer = <HTMLElement> document.querySelector('#history-container')
-    this.toggleHistoryButton = <HTMLElement> document.querySelector('#toggle-history-btn')
     this.keypad = <HTMLElement> document.querySelector('#calculator-keypad')
     this.calculatorResume = <HTMLElement> document.querySelector('#calculator__resume')
 
@@ -58,21 +57,22 @@ class Calculator {
       haveSeparatorPoint: false
     }
 
+    new CalculatorTheme(<HTMLElement> this.calculatorEL.querySelector('#toggle-theme-btn'))
+    new CalculatorHistory(
+      <HTMLElement> this.calculatorEL.querySelector('#toggle-history-btn'),
+      <HTMLElement> this.calculatorEL.querySelector('#history-container')
+    )
+
     this.events()
   }
 
   // events
   events() {
-    this.toggleHistoryButton.addEventListener('click', () => this.toggleHistory())
     this.keypad.addEventListener('click', (e) => this.handleKey(e.target as HTMLElement))
     document.addEventListener('keyup', (e) => this.handleKeyboard(e))
   }
 
   // methods
-  toggleHistory() {
-    this.historyContainer.classList.toggle('active')
-  }
-
   handleKeyboard(e: KeyboardEvent) {
     e.preventDefault()
     const key = e.key
