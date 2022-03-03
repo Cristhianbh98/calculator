@@ -1,34 +1,26 @@
 import CalculatorTheme from './CalculatorTheme'
 import CalculatorHistory from './CalculatorHistory'
+import { getState } from './calculatorState'
+
+const { updateCalculatorState } = getState()
 
 type tkeyOptions = {
   [key: string]: () => void
-}
-
-type tCalculatorState = {
-  haveOperator: boolean,
-  haveSeparatorPoint: boolean
 }
 
 class Calculator {
   calculatorEL: HTMLElement
   calculatorResume: HTMLElement
   keypad: HTMLElement
-
-  inputHistory: string
   inputElement: HTMLInputElement
-
-  calculatorState: tCalculatorState
 
   keyOptions: tkeyOptions
 
   constructor() {
     this.calculatorEL = <HTMLElement> document.querySelector('#calculator')
+    this.inputElement = <HTMLInputElement> this.calculatorEL.querySelector('#input')
+    this.calculatorResume = <HTMLElement> this.calculatorEL.querySelector('#calculator__total')
     this.keypad = <HTMLElement> document.querySelector('#calculator-keypad')
-    this.calculatorResume = <HTMLElement> document.querySelector('#calculator__resume')
-
-    this.inputHistory = ''
-    this.inputElement = <HTMLInputElement> document.querySelector('#input-history')
 
     this.keyOptions = {
       '0': () => this.addInput('0'),
@@ -52,24 +44,17 @@ class Calculator {
       'percent': () => this.getPercent()
     }
 
-    this.calculatorState = {
-      haveOperator: false,
-      haveSeparatorPoint: false
-    }
-
     new CalculatorTheme(<HTMLElement> this.calculatorEL.querySelector('#toggle-theme-btn'))
-    new CalculatorHistory(
-      <HTMLElement> this.calculatorEL.querySelector('#toggle-history-btn'),
-      <HTMLElement> this.calculatorEL.querySelector('#history-container')
-    )
+    new CalculatorHistory(<HTMLElement> this.calculatorEL.querySelector('#toggle-history-btn'), <HTMLElement> this.calculatorEL.querySelector('#history-container'))
 
+    this.getResult()
     this.events()
   }
 
   // events
   events() {
-    this.keypad.addEventListener('click', (e) => this.handleKey(e.target as HTMLElement))
     document.addEventListener('keyup', (e) => this.handleKeyboard(e))
+    this.keypad.addEventListener('click', (e) => this.handleKey(e.target as HTMLElement))
   }
 
   // methods
@@ -105,66 +90,64 @@ class Calculator {
   }
 
   // handle input
-  addInput(input: string) {
-    this.inputHistory += input
+  addInput(char: string) {
+    const { input } = getState()
+
+    const newInput = input + char
+    updateCalculatorState({setting: 'input', newValue: newInput})
 
     this.updateInput()
   }
 
   eraseInput() {
-    const lastChar: string = this.inputHistory.slice(-1)
+    const { input } = getState()
+    const lastChar = input.slice(-1)
 
-    if (lastChar === '.') this.changeState({ ...this.calculatorState, haveSeparatorPoint: false })
-    else if (isNaN(parseInt(lastChar))) this.changeState({ ...this.calculatorState, haveOperator: false })
+    if (lastChar === '.') updateCalculatorState({setting: 'haveSeparatorPoint', newValue: false})
+    else if (isNaN(parseInt(lastChar))) updateCalculatorState({setting: 'haveOperator', newValue: false})
 
-    this.inputHistory = this.inputHistory.slice(0, -1)
+    const newInput = input.slice(0, -1)
+    updateCalculatorState({setting: 'input', newValue: newInput})
     this.updateInput()
   }
 
   updateInput() {
-    this.inputElement.value = this.inputHistory
+    const { input } = getState()
+    this.inputElement.value = input
   }
 
   clearInput() {
     this.resetState()
     this.calculatorResume.textContent = '0'
     this.inputElement.value = ''
-    this.inputHistory = ''
+    updateCalculatorState({setting: 'input', newValue: ''})
   }
 
   // handle state
   resetState() {
-    this.calculatorState = {
-      haveOperator: false,
-      haveSeparatorPoint: false
-    }
-  }
-
-  changeState(newCalculatorState: tCalculatorState) {
-    this.calculatorState = newCalculatorState
+    updateCalculatorState({setting: 'haveOperator', newValue: false})
+    updateCalculatorState({setting: 'haveSeparatorPoint', newValue: false})
   }
 
   // handle point
   addPoint() {
-    const { haveSeparatorPoint } = this.calculatorState
+    const { haveSeparatorPoint } = getState()
     if (!haveSeparatorPoint) {
-      this.changeState({ ...this.calculatorState, haveSeparatorPoint: true })
+      updateCalculatorState({setting: 'haveSeparatorPoint', newValue: true})
       this.addInput('.')
     }
   }
 
   // handle Operator
   addOperator(operator: string) {
-    const { haveOperator } = this.calculatorState
-    const lastChar: number = parseInt(this.inputHistory.slice(-1))
+    const { haveOperator, input } = getState()
+    const lastChar: number = parseInt(input.slice(-1))
 
     if (!haveOperator) {
       this.addInput(operator)
 
-      this.changeState({
-        haveSeparatorPoint:  false,
-        haveOperator: true
-      })
+      updateCalculatorState({setting: 'haveSeparatorPoint', newValue: false})
+      updateCalculatorState({setting: 'haveOperator', newValue: true})
     } else if (!isNaN(lastChar)) {
       this.getResult()
       this.addOperator(operator)
@@ -181,11 +164,12 @@ class Calculator {
   }
 
   getOperation(): string[] {
+    const { input } = getState()
     let operation: string[] = []
     const separators: string[] = ['+', '-', '÷', '×']
     
     for (let i = 0; i < separators.length; i++) {
-      operation = this.inputHistory.split(separators[i])
+      operation = input.split(separators[i])
       if (operation.length > 1) {
 
         if (operation[0] === '' && separators[i] === '-') {
@@ -234,7 +218,7 @@ class Calculator {
     this.clearInput()
 
     this.calculatorResume.textContent = result
-    this.addInput(result)
+    this.addInput(result === '0' ? '': result)
   }
 }
 
