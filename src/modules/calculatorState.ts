@@ -2,9 +2,15 @@ import create from 'zustand/vanilla'
 import { getLocalStorage, setLocalStorage } from './utils'
 
 //types
+type tOperation = {
+  operation: string,
+  result: string
+}
+
 type tCalculatorState = {
   haveOperator: boolean,
   haveSeparatorPoint: boolean,
+  history: tOperation[]
   input: string
 }
 
@@ -22,6 +28,7 @@ const key = 'calculator'
 const initialCalculatorState: tCalculatorState = {
   haveOperator: false,
   haveSeparatorPoint: false,
+  history: [],
   input: ''
 }
 

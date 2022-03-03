@@ -29,18 +29,27 @@ type tKeyOptions = {
 
 type tIndexOption = keyof tKeyOptions
 
+type tOperation = {
+  operation: string,
+  result: string
+}
+
 // functionality
 class Calculator {
   calculatorEL: HTMLElement
   calculatorTotalEl: HTMLElement
   keypad: HTMLElement
+  historyContainerEl: HTMLElement
+  deleteHistoryBtn: HTMLButtonElement
   inputEl: HTMLInputElement
   keyOptions: tKeyOptions
 
   constructor() {
     this.calculatorEL = <HTMLElement> document.querySelector('#calculator')
     this.inputEl = <HTMLInputElement> this.calculatorEL.querySelector('#input')
+    this.deleteHistoryBtn = <HTMLButtonElement> this.calculatorEL.querySelector('#delete-history-btn')
     this.calculatorTotalEl = <HTMLElement> this.calculatorEL.querySelector('#calculator__total')
+    this.historyContainerEl = <HTMLElement> this.calculatorEL.querySelector('#history__content')
     this.keypad = <HTMLElement> this.calculatorEL.querySelector('#calculator-keypad')
 
     this.keyOptions = {
@@ -68,6 +77,8 @@ class Calculator {
     new CalculatorTheme(<HTMLElement> this.calculatorEL.querySelector('#toggle-theme-btn'))
     new CalculatorHistory(<HTMLElement> this.calculatorEL.querySelector('#toggle-history-btn'), <HTMLElement> this.calculatorEL.querySelector('#history-container'))
 
+    getState().history.forEach(operation => this.createHistoryItem(operation, false))
+    
     this.getResult()
     this.events()
   }
@@ -75,7 +86,9 @@ class Calculator {
   // events
   events() {
     document.addEventListener('keyup', (e) => this.handleKeyboard(e.key))
+    this.deleteHistoryBtn.addEventListener('click', () => this.deleteHistory())
     this.keypad.addEventListener('click', (e) => this.handleKeypad(e.target as HTMLElement))
+    this.historyContainerEl.addEventListener('click', (e) => this.handleHistoryContainer(e.target as HTMLElement))
   }
 
   // methods
@@ -229,11 +242,65 @@ class Calculator {
   }
 
   addResult(result: string) {
+    this.updateHistory(result)
     this.resetState()
     this.clearInput()
 
-    this.calculatorTotalEl.textContent = result
+    this.updateTotal(result)
     this.addInput(result === '0' ? '': result)
+  }
+
+  updateTotal(total: string) {
+    this.calculatorTotalEl.textContent = total
+  }
+
+  // handle history
+  updateHistory(result: string) {
+    const {history, input} = getState()
+
+    const lastOperation: tOperation = history[0]
+
+    if(result === '0' || lastOperation?.result === result) return
+
+    const newOperation: tOperation = {
+      operation: input,
+      result: result
+    }
+
+    this.createHistoryItem(newOperation)
+
+    const newHistory = [newOperation, ...history]
+    updateCalculatorState({setting: 'history', newValue: newHistory})
+  }
+
+  deleteHistory() {
+    this.historyContainerEl.innerHTML = ''
+    updateCalculatorState({setting: 'history', newValue: []})
+
+    this.clearInput()
+  }
+
+  createHistoryItem(operation: tOperation, insertBefore = true) {
+    const historyItemEl = document.createElement('button')
+    historyItemEl.classList.add('calculator__history__item')
+    historyItemEl.classList.add('history-item')
+    historyItemEl.setAttribute('data-operation', operation.operation)
+    historyItemEl.setAttribute('data-result', operation.result)
+    historyItemEl.textContent = `${operation.operation} = ${operation.result}`
+
+    if (insertBefore) this.historyContainerEl.insertBefore(historyItemEl, this.historyContainerEl.firstChild)
+    else this.historyContainerEl.appendChild(historyItemEl)
+  }
+
+  handleHistoryContainer(el: HTMLElement) {
+    if (el.classList.contains('history-item')) {
+      const operation = el.getAttribute('data-operation')
+      const result = <string> el.getAttribute('data-result')
+      
+      updateCalculatorState({setting: 'input', newValue: operation})
+      this.updateInput()
+      this.updateTotal(result)
+    }
   }
 }
 
