@@ -4,23 +4,44 @@ import { getState } from './calculatorState'
 
 const { updateCalculatorState } = getState()
 
-type tkeyOptions = {
-  [key: string]: () => void
+// types
+type tKeyOptions = {
+  '0': () => void,
+  '1': () => void,
+  '2': () => void,
+  '3': () => void,
+  '4': () => void,
+  '5': () => void,
+  '6': () => void,
+  '7': () => void,
+  '8': () => void,
+  '9': () => void,
+  'point': () => void,
+  'divide': () => void,
+  'times': () => void,
+  'minus': () => void,
+  'plus': () => void,
+  'clear': () => void,
+  'erase': () => void,
+  'equal': () => void,
+  'percent': () => void
 }
 
+type tIndexOption = keyof tKeyOptions
+
+// functionality
 class Calculator {
   calculatorEL: HTMLElement
-  calculatorResume: HTMLElement
+  calculatorTotalEl: HTMLElement
   keypad: HTMLElement
-  inputElement: HTMLInputElement
-
-  keyOptions: tkeyOptions
+  inputEl: HTMLInputElement
+  keyOptions: tKeyOptions
 
   constructor() {
     this.calculatorEL = <HTMLElement> document.querySelector('#calculator')
-    this.inputElement = <HTMLInputElement> this.calculatorEL.querySelector('#input')
-    this.calculatorResume = <HTMLElement> this.calculatorEL.querySelector('#calculator__total')
-    this.keypad = <HTMLElement> document.querySelector('#calculator-keypad')
+    this.inputEl = <HTMLInputElement> this.calculatorEL.querySelector('#input')
+    this.calculatorTotalEl = <HTMLElement> this.calculatorEL.querySelector('#calculator__total')
+    this.keypad = <HTMLElement> this.calculatorEL.querySelector('#calculator-keypad')
 
     this.keyOptions = {
       '0': () => this.addInput('0'),
@@ -53,16 +74,13 @@ class Calculator {
 
   // events
   events() {
-    document.addEventListener('keyup', (e) => this.handleKeyboard(e))
-    this.keypad.addEventListener('click', (e) => this.handleKey(e.target as HTMLElement))
+    document.addEventListener('keyup', (e) => this.handleKeyboard(e.key))
+    this.keypad.addEventListener('click', (e) => this.handleKeypad(e.target as HTMLElement))
   }
 
   // methods
-  handleKeyboard(e: KeyboardEvent) {
-    e.preventDefault()
-    const key = e.key
-    
-    if (!isNaN(parseInt(key))) this.keyOptions[key]()
+  handleKeyboard(key: string) {    
+    if (!isNaN(parseInt(key))) this.keyOptions[<tIndexOption>key]()
     else if (key === '.') this.keyOptions['point']()
     else if (key === '+') this.keyOptions['plus']()
     else if (key === '-') this.keyOptions['minus']()
@@ -73,11 +91,11 @@ class Calculator {
     else if (key === 'Enter') this.keyOptions['equal']()
   }
 
-  handleKey(el: HTMLElement) {
+  handleKeypad(el: HTMLElement) {
     if (el.tagName !== 'BUTTON' && el.tagName !== 'svg' && el.tagName !== 'path') return
     if (el.tagName === 'svg' || el.tagName === 'path') el = this.findButtonKey(el)
     
-    const keyData = <string> el.getAttribute('data-key')
+    const keyData = <tIndexOption> el.getAttribute('data-key')
     this.keyOptions[keyData]()
   }
 
@@ -85,11 +103,15 @@ class Calculator {
     while(el.tagName !== 'BUTTON') {
       el = <HTMLElement>el.parentElement
     }
-
     return el
   }
 
   // handle input
+  updateInput() {
+    const { input } = getState()
+    this.inputEl.value = input
+  }
+
   addInput(char: string) {
     const { input } = getState()
 
@@ -111,25 +133,19 @@ class Calculator {
     this.updateInput()
   }
 
-  updateInput() {
-    const { input } = getState()
-    this.inputElement.value = input
-  }
-
   clearInput() {
     this.resetState()
-    this.calculatorResume.textContent = '0'
-    this.inputElement.value = ''
+    this.calculatorTotalEl.textContent = '0'
+    this.inputEl.value = ''
     updateCalculatorState({setting: 'input', newValue: ''})
   }
 
-  // handle state
+  // operator, point, state
   resetState() {
     updateCalculatorState({setting: 'haveOperator', newValue: false})
     updateCalculatorState({setting: 'haveSeparatorPoint', newValue: false})
   }
 
-  // handle point
   addPoint() {
     const { haveSeparatorPoint } = getState()
     if (!haveSeparatorPoint) {
@@ -138,7 +154,6 @@ class Calculator {
     }
   }
 
-  // handle Operator
   addOperator(operator: string) {
     const { haveOperator, input } = getState()
     const lastChar: number = parseInt(input.slice(-1))
@@ -154,8 +169,8 @@ class Calculator {
     }
   }
 
-   // handle operation
-   getResult() {
+  // handle operation
+  getResult() {
     const operation = this.getOperation()
     let result = this.makeOperation(operation)
     if (result % 1 !== 0) result = parseFloat(result.toFixed(4))
@@ -163,10 +178,18 @@ class Calculator {
     this.addResult(result.toString())
   }
 
+  getPercent() {
+    const operation = this.getOperation()
+    const number = Math.abs(parseFloat(operation[0]))
+    const result = parseFloat((number / 100).toFixed(4))
+
+    this.addResult(result.toString())
+  }
+
   getOperation(): string[] {
     const { input } = getState()
     let operation: string[] = []
-    const separators: string[] = ['+', '-', '÷', '×']
+    const separators = ['+', '-', '÷', '×']
     
     for (let i = 0; i < separators.length; i++) {
       operation = input.split(separators[i])
@@ -205,19 +228,11 @@ class Calculator {
     return parseFloat(number)
   }
 
-  getPercent() {
-    const operation = this.getOperation()
-    const number = Math.abs(parseFloat(operation[0]))
-    const result = number / 100
-
-    this.addResult(result.toString())
-  }
-
   addResult(result: string) {
     this.resetState()
     this.clearInput()
 
-    this.calculatorResume.textContent = result
+    this.calculatorTotalEl.textContent = result
     this.addInput(result === '0' ? '': result)
   }
 }
